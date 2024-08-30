@@ -90,6 +90,23 @@
         .project-card a:hover {
             background: #ff6a3d;
         }
+        .filter-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .filter-btn {
+            background-color: #e8491d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background-color: #ff6a3d;
+        }
     </style>
 </head>
 <body>
@@ -100,8 +117,13 @@
     </header>
 
     <div class="container">
+        <div class="filter-container">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="extension">Extensions</button>
+            <button class="filter-btn" data-filter="web">Web Projects</button>
+        </div>
         <div class="projects">
-            <div class="project-card">
+            <div class="project-card" data-category="extension">
                 <img src="https://lh3.googleusercontent.com/skIINi-PPS4h7D9s0OM7SnVRG_m1ptJgPKQjYTmPWKJrmxhry3GVRsejkMM-Mndx9kO-nWAewsX4dM4Ru5-rn-vXYA=s1280-w1280-h800" alt="YTA - YouTube Accessible Playlist Buttons" class="project-image">
                 <img src="https://lh3.googleusercontent.com/aFx48cATrnnRxOVS-EsVH8sLJzx0iDfAyrFJq9ZXchCJwgUKa1SaNskr4SyH8vRSo6NxC9C_My_D12-UOpBLNTej4DY=s60" alt="YTA - YouTube Accessible Playlist Buttons" class="project-logo">
                 <div class="project-info">
@@ -110,7 +132,7 @@
                     <a href="https://chromewebstore.google.com/detail/yta-youtube-accessible-pl/jdbjgpcmckjccbgheiefjhcnpbknenjf" target="_blank">Install Extension</a>
                 </div>
             </div>
-            <div class="project-card">
+            <div class="project-card" data-category="web">
                 <img src="/images/airclaim.png" alt="Reclamación Aérea" class="project-image">
                 <img src="https://reclamacionaerea.co/airlogow.png" alt="Reclamación Aérea" class="project-logo">
                 <div class="project-info">
@@ -122,5 +144,30 @@
             <!-- Add more project cards as needed -->
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const projectCards = document.querySelectorAll('.project-card');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const filter = button.getAttribute('data-filter');
+                    
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    // Filter projects
+                    projectCards.forEach(card => {
+                        if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                            card.style.display = 'flex';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>
