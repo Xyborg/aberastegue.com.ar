@@ -1,27 +1,14 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" class="light">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Aberastegue</title>
   <meta name="robots" content="noindex, nofollow" />
-  <meta name="theme-color" content="#0f172a" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     :root{
-      --bg:#0f172a;         /* dark bg */
-      --bg-grad:#0b1324;
-      --card:#0b1220;
-      --text:#e5e7eb;
-      --muted:#94a3b8;
-      --brand:#22c55e;
-      --accent:#38bdf8;
-      --ring:rgba(56,189,248,.35);
-      --max:1100px;
-      --radius:20px;
-      --border:rgba(148,163,184,.15);
-    }
-    /* Light theme overrides */
-    html[data-theme="light"]{
       --bg:#f6f7fb;
       --bg-grad:#ffffff;
       --card:#ffffff;
@@ -31,20 +18,35 @@
       --accent:#0ea5e9;
       --brand:#16a34a;
       --ring:rgba(14,165,233,.25);
+      --max:1100px;
+      --radius:20px;
     }
+    .dark{
+      --bg:#0f172a;
+      --bg-grad:#0b1324;
+      --card:#0b1220;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --border:rgba(148,163,184,.15);
+      --accent:#38bdf8;
+      --brand:#22c55e;
+      --ring:rgba(56,189,248,.35);
+    }
+
     html,body{margin:0;height:100%;background:linear-gradient(180deg,var(--bg),var(--bg-grad));color:var(--text);font:16px/1.6 system-ui,Roboto,Inter,Helvetica,Arial,sans-serif}
     .container{max-width:var(--max);margin:0 auto;padding:24px}
-    header{position:sticky;top:0;backdrop-filter:saturate(1.2) blur(10px);background:color-mix(in oklab, var(--bg) 70%, transparent);border-bottom:1px solid var(--border);z-index:50}
-    .nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
+
+    header{position:sticky;top:0;backdrop-filter:blur(10px);background:color-mix(in oklab, var(--bg) 80%, transparent);border-bottom:1px solid var(--border);z-index:50}
+    .header-row{display:flex;justify-content:space-between;align-items:center;gap:16px}
+
     .brand{font-weight:800;letter-spacing:.3px}
-    .controls{display:flex;align-items:center;gap:8px}
-    .btn{appearance:none;border:1px solid var(--border);background:transparent;color:var(--text);padding:6px 10px;border-radius:999px;cursor:pointer;font-size:12px}
-    .btn[aria-pressed="true"]{outline:none;box-shadow:0 0 0 4px var(--ring);border-color:color-mix(in oklab, var(--accent) 60%, var(--border));}
-    .toggle{display:inline-flex;align-items:center;gap:6px}
-    /*.hero{padding:64px 0 32px}*/
+    .btn{appearance:none;border:1px solid var(--border);background:transparent;color:var(--text);padding:6px 10px;border-radius:999px;cursor:pointer;font-size:12px;display:inline-flex;align-items:center;gap:6px}
+    .btn[aria-pressed="true"]{outline:none;box-shadow:0 0 0 4px var(--ring)}
+
+    .hero{padding:64px 0 32px}
     .hero .grid{display:grid;grid-template-columns:1fr;gap:28px}
     .card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.02));border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 10px 30px rgba(0,0,0,.08)}
-    html[data-theme="light"] .card{background:#fff}
+    .dark .card{background:#0b1220}
     .hero h1{font-size:clamp(28px,4.2vw,48px);line-height:1.15;margin:8px 0 10px}
     .hero p{color:var(--muted);font-size:18px}
     .pills{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
@@ -58,25 +60,19 @@
     .service p{margin:0;color:var(--muted)}
     .divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:24px 0}
     .logos{display:flex;flex-wrap:wrap;gap:18px;color:var(--muted);font-size:13px}
-    .footer{color:var(--muted);font-size:14px}
-    .footer .row{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-    @media (max-width:980px){
-      .services .grid{grid-template-columns:1fr}
-    }
+    .footer{padding:24px 0;color:var(--muted);font-size:14px}
+    .footer .row{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+    .toggle-group{display:flex;gap:8px}
   </style>
 </head>
 <body>
   <header>
-    <div class="container nav">
+    <div class="container header-row">
       <div class="brand"><span>Aberastegue</span></div>
-      <div class="controls">
-        <!-- Language switcher -->
-        <div role="group" aria-label="Language" class="toggle">
-          <button class="btn" id="btn-en" aria-pressed="true">EN</button>
-          <button class="btn" id="btn-es" aria-pressed="false">ES</button>
-        </div>
-        <!-- Theme switcher -->
-        <button class="btn" id="theme-toggle" aria-label="Toggle light/dark" title="Theme">🌙</button>
+      <!-- Keep language switcher in header -->
+      <div role="group" aria-label="Language">
+        <button class="btn" id="btn-en" aria-pressed="true">EN</button>
+        <button class="btn" id="btn-es" aria-pressed="false">ES</button>
       </div>
     </div>
   </header>
@@ -117,7 +113,7 @@
         </div>
         <div class="card service">
           <h3 data-i18n="svc_domain_title">Domains & Social Handles</h3>
-          <p data-i18n="svc_domain_desc">UDRP/URS complaints and handle recovery for impersonation or bad‑faith registrations.</p>
+          <p data-i18n="svc_domain_desc">UDRP/URS complaints and handle recovery for impersonation or bad-faith registrations.</p>
         </div>
       </div>
       <div class="logos" style="margin-top:16px">
@@ -129,14 +125,18 @@
   <footer class="container footer">
     <div class="row">
       <div>© <span id="year"></span> Aberastegue. <span data-i18n="rights">All rights reserved.</span></div>
+      <div class="toggle-group">
+        <button class="btn theme-toggle" onclick="toggleTheme()" title="Toggle Theme" aria-label="Toggle Theme">
+          <i class="fas fa-moon"></i>
+          <span class="theme-text">Toggle Theme</span>
+        </button>
+      </div>
     </div>
   </footer>
 
   <script>
-    // YEAR
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // LANGUAGE DICTIONARY
     const dict = {
       en: {
         headline: 'Stop infringement fast.<br/>Protect your IP today.',
@@ -191,31 +191,33 @@
       btnEs.setAttribute('aria-pressed', lang === 'es');
     };
 
-    // Init language buttons
     const btnEn = document.getElementById('btn-en');
     const btnEs = document.getElementById('btn-es');
     btnEn.addEventListener('click', () => setLang('en'));
     btnEs.addEventListener('click', () => setLang('es'));
-    // Try to auto-set from browser
     const pref = (navigator.language || 'en').slice(0,2);
     setLang(['en','es'].includes(pref) ? pref : 'en');
 
-    // THEME TOGGLER
-    const themeBtn = document.getElementById('theme-toggle');
-    const applyTheme = (mode) => {
-      document.documentElement.setAttribute('data-theme', mode);
-      themeBtn.textContent = mode === 'light' ? '☀️' : '🌙';
-      // Update theme-color meta for proper address bar color on mobile
-      const metaTheme = document.querySelector('meta[name="theme-color"]');
-      metaTheme.setAttribute('content', mode === 'light' ? '#ffffff' : '#0f172a');
+    function toggleTheme(){
+      document.documentElement.classList.toggle('dark');
+      const mode = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
       try{ localStorage.setItem('theme', mode); }catch(e){}
-    };
-    const saved = (()=>{try{return localStorage.getItem('theme')}catch(e){return null}})();
-    if(saved){ applyTheme(saved); }
-    themeBtn.addEventListener('click', () => {
-      const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-      applyTheme(next);
-    });
+      updateThemeIcon();
+      const metaTheme = document.querySelector('meta[name="theme-color"]');
+      metaTheme.setAttribute('content', mode === 'dark' ? '#0f172a' : '#ffffff');
+    }
+    function updateThemeIcon(){
+      const isDark = document.documentElement.classList.contains('dark');
+      const icon = document.querySelector('.theme-toggle i');
+      if(icon){ icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon'; }
+    }
+    (function(){
+      const saved = (()=>{try{return localStorage.getItem('theme')}catch(e){return null}})() || 'light';
+      if(saved === 'dark') document.documentElement.classList.add('dark');
+      updateThemeIcon();
+      const metaTheme = document.querySelector('meta[name="theme-color"]');
+      metaTheme.setAttribute('content', saved === 'dark' ? '#0f172a' : '#ffffff');
+    })();
   </script>
 </body>
 </html>
