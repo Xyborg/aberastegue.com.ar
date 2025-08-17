@@ -1,46 +1,64 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Aberastegue</title>
   <meta name="robots" content="noindex, nofollow" />
-  <meta name="description" content="Aberastegue helps creators and brands stop copyright and trademark infringement fast. Cease‑and‑desist letters, DMCA takedowns, marketplace removals, and litigation support." />
   <meta name="theme-color" content="#0f172a" />
   <style>
     :root{
-      --bg:#0f172a;
+      --bg:#0f172a;         /* dark bg */
+      --bg-grad:#0b1324;
       --card:#0b1220;
       --text:#e5e7eb;
       --muted:#94a3b8;
       --brand:#22c55e;
       --accent:#38bdf8;
+      --ring:rgba(56,189,248,.35);
       --max:1100px;
       --radius:20px;
+      --border:rgba(148,163,184,.15);
     }
-    html,body{margin:0;height:100%;background:linear-gradient(180deg,var(--bg),#0b1324);color:var(--text);font:16px/1.6 system-ui,Roboto,Inter,Helvetica,Arial,sans-serif}
+    /* Light theme overrides */
+    html[data-theme="light"]{
+      --bg:#f6f7fb;
+      --bg-grad:#ffffff;
+      --card:#ffffff;
+      --text:#0b1220;
+      --muted:#536276;
+      --border:rgba(15,23,42,.12);
+      --accent:#0ea5e9;
+      --brand:#16a34a;
+      --ring:rgba(14,165,233,.25);
+    }
+    html,body{margin:0;height:100%;background:linear-gradient(180deg,var(--bg),var(--bg-grad));color:var(--text);font:16px/1.6 system-ui,Roboto,Inter,Helvetica,Arial,sans-serif}
     .container{max-width:var(--max);margin:0 auto;padding:24px}
-    header{position:sticky;top:0;backdrop-filter:saturate(1.2) blur(10px);background:rgba(15,23,42,.6);border-bottom:1px solid rgba(148,163,184,.1);z-index:50}
+    header{position:sticky;top:0;backdrop-filter:saturate(1.2) blur(10px);background:color-mix(in oklab, var(--bg) 70%, transparent);border-bottom:1px solid var(--border);z-index:50}
     .nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
     .brand{font-weight:800;letter-spacing:.3px}
-    .tag{font-size:11px;padding:4px 8px;border:1px solid rgba(148,163,184,.2);border-radius:999px;color:#cbd5e1}
+    .controls{display:flex;align-items:center;gap:8px}
+    .btn{appearance:none;border:1px solid var(--border);background:transparent;color:var(--text);padding:6px 10px;border-radius:999px;cursor:pointer;font-size:12px}
+    .btn[aria-pressed="true"]{outline:none;box-shadow:0 0 0 4px var(--ring);border-color:color-mix(in oklab, var(--accent) 60%, var(--border));}
+    .toggle{display:inline-flex;align-items:center;gap:6px}
     .hero{padding:64px 0 32px}
     .hero .grid{display:grid;grid-template-columns:1fr;gap:28px}
-    .card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.02));border:1px solid rgba(148,163,184,.15);border-radius:var(--radius);box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.02));border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 10px 30px rgba(0,0,0,.08)}
+    html[data-theme="light"] .card{background:#fff}
     .hero h1{font-size:clamp(28px,4.2vw,48px);line-height:1.15;margin:8px 0 10px}
     .hero p{color:var(--muted);font-size:18px}
     .pills{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
-    .pill{background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.25);color:#e0f2fe;padding:8px 12px;border-radius:999px;font-size:13px}
-    .stats{display:flex;gap:18px;margin-top:12px;color:#cbd5e1;flex-wrap:wrap}
-    .stat{padding:10px 14px;border:1px dashed rgba(148,163,184,.25);border-radius:12px}
+    .pill{background:rgba(56,189,248,.1);border:1px solid color-mix(in oklab, var(--accent) 50%, transparent);color:currentColor;padding:8px 12px;border-radius:999px;font-size:13px}
+    .stats{display:flex;gap:18px;margin-top:12px;color:inherit;flex-wrap:wrap}
+    .stat{padding:10px 14px;border:1px dashed var(--border);border-radius:12px}
     .services{padding:32px 0}
     .services .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
     .service{padding:18px}
     .service h3{margin:0 0 6px;font-size:18px}
     .service p{margin:0;color:var(--muted)}
-    .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(148,163,184,.25),transparent);margin:24px 0}
+    .divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:24px 0}
     .logos{display:flex;flex-wrap:wrap;gap:18px;color:var(--muted);font-size:13px}
-    .footer{padding:24px 0;color:#94a3b8;font-size:14px}
+    .footer{padding:24px 0;color:var(--muted);font-size:14px}
     .footer .row{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     @media (max-width:980px){
       .services .grid{grid-template-columns:1fr}
@@ -50,8 +68,15 @@
 <body>
   <header>
     <div class="container nav">
-      <div class="brand">
-        <span>Aberastegue</span>
+      <div class="brand"><span>Aberastegue</span></div>
+      <div class="controls">
+        <!-- Language switcher -->
+        <div role="group" aria-label="Language" class="toggle">
+          <button class="btn" id="btn-en" aria-pressed="true">EN</button>
+          <button class="btn" id="btn-es" aria-pressed="false">ES</button>
+        </div>
+        <!-- Theme switcher -->
+        <button class="btn" id="theme-toggle" aria-label="Toggle light/dark" title="Theme">🌙</button>
       </div>
     </div>
   </header>
@@ -60,18 +85,17 @@
     <section class="hero">
       <div class="grid">
         <div>
-          <h1>Stop infringement fast. Protect your IP today.</h1>
-          <p>Aberastegue helps creators and brands resolve <strong>copyright</strong> and <strong>trademark</strong> infringement claims—swiftly and discreetly. From DMCA takedowns and cease‑and‑desist letters to marketplace removals and litigation support.</p>
+          <h1 data-i18n="headline">Stop infringement fast.<br/>Protect your IP today.</h1>
+          <p data-i18n="subhead">Aberastegue helps creators and brands resolve <strong>copyright</strong> and <strong>trademark</strong> infringement claims—swiftly and discreetly. From DMCA takedowns to marketplace removals and litigation support.</p>
           <div class="pills">
-            <span class="pill">DMCA & EU Copyright</span>
-            <span class="pill">Marketplace Removals</span>
-            <span class="pill">Cease‑and‑Desist</span>
-            <span class="pill">EUIPO / DPMA Disputes</span>
-            <span class="pill">Brand Monitoring</span>
+            <span class="pill" data-i18n="pill_dmca">DMCA & EU Copyright</span>
+            <span class="pill" data-i18n="pill_market">Marketplace Removals</span>
+            <span class="pill" data-i18n="pill_tm">EUIPO / DPMA Disputes</span>
+            <span class="pill" data-i18n="pill_monitor">Brand Monitoring</span>
           </div>
           <div class="stats">
-            <div class="stat">1000+ listings/publications removed</div>
-            <div class="stat">Jurisdictions: EU • US • UK</div>
+            <div class="stat" data-i18n="stat_listings">1000+ listings/publications removed</div>
+            <div class="stat" data-i18n="stat_juris">Jurisdictions: EU • US • UK</div>
           </div>
         </div>
       </div>
@@ -80,36 +104,118 @@
     <div class="divider"></div>
 
     <section id="services" class="services">
-      <h2 style="margin:0 0 8px">Focused services for copyright & trademark claims</h2>
-      <p class="mini" style="margin:0 0 16px">Clear scope. Predictable pricing. Fast execution.</p>
+      <h2 style="margin:0 0 8px" data-i18n="services_title">Focused services for copyright & trademark claims</h2>
+      <p class="mini" style="margin:0 0 16px" data-i18n="services_sub">Clear scope. Predictable pricing. Fast execution.</p>
       <div class="grid">
         <div class="card service">
-          <h3>DMCA & EU Takedowns</h3>
-          <p>Rapid removals for copied photos, videos, code, and product pages across hosts and CDNs.</p>
+          <h3 data-i18n="svc_dmca_title">DMCA & EU Takedowns</h3>
+          <p data-i18n="svc_dmca_desc">Rapid removals for copied photos, videos, code, and product pages across hosts and CDNs.</p>
         </div>
         <div class="card service">
-          <h3>Marketplace Removals</h3>
-          <p>Amazon, eBay, Etsy, Instagram, Shopify & more—counterfeits and brand misuse removed.</p>
+          <h3 data-i18n="svc_market_title">Marketplace Removals</h3>
+          <p data-i18n="svc_market_desc">Amazon, eBay, Etsy, Instagram, Shopify & more—counterfeits and brand misuse removed.</p>
         </div>
         <div class="card service">
-          <h3>Domains & Social Handles</h3>
-          <p>UDRP/URS complaints and handle recovery for impersonation or bad‑faith registrations.</p>
+          <h3 data-i18n="svc_domain_title">Domains & Social Handles</h3>
+          <p data-i18n="svc_domain_desc">UDRP/URS complaints and handle recovery for impersonation or bad‑faith registrations.</p>
         </div>
       </div>
       <div class="logos" style="margin-top:16px">
-        Trusted on: <span class="tag">Amazon</span> <span class="tag">eBay</span> <span class="tag">Etsy</span> <span class="tag">Meta</span> <span class="tag">Shopify</span> <span class="tag">Cloudflare</span>
+        <span data-i18n="trusted_on">Trusted on:</span> <span class="tag">Amazon</span> <span class="tag">eBay</span> <span class="tag">Etsy</span> <span class="tag">Meta</span> <span class="tag">Shopify</span> <span class="tag">Cloudflare</span>
       </div>
     </section>
   </main>
 
   <footer class="container footer">
     <div class="row">
-      <div>© <span id="year"></span> Aberastegue. All rights reserved.</div>
+      <div>© <span id="year"></span> Aberastegue. <span data-i18n="rights">All rights reserved.</span></div>
     </div>
   </footer>
 
   <script>
+    // YEAR
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // LANGUAGE DICTIONARY
+    const dict = {
+      en: {
+        headline: 'Stop infringement fast.<br/>Protect your IP today.',
+        subhead: 'Aberastegue helps creators and brands resolve <strong>copyright</strong> and <strong>trademark</strong> infringement claims—swiftly and discreetly. From DMCA takedowns to marketplace removals and litigation support.',
+        pill_dmca: 'DMCA & EU Copyright',
+        pill_market: 'Marketplace Removals',
+        pill_tm: 'EUIPO / DPMA Disputes',
+        pill_monitor: 'Brand Monitoring',
+        stat_listings: '1000+ listings/publications removed',
+        stat_juris: 'Jurisdictions: EU • US • UK',
+        services_title: 'Focused services for copyright & trademark claims',
+        services_sub: 'Clear scope. Predictable pricing. Fast execution.',
+        svc_dmca_title: 'DMCA & EU Takedowns',
+        svc_dmca_desc: 'Rapid removals for copied photos, videos, code, and product pages across hosts and CDNs.',
+        svc_market_title: 'Marketplace Removals',
+        svc_market_desc: 'Amazon, eBay, Etsy, Instagram, Shopify & more—counterfeits and brand misuse removed.',
+        svc_domain_title: 'Domains & Social Handles',
+        svc_domain_desc: 'UDRP/URS complaints and handle recovery for impersonation or bad‑faith registrations.',
+        trusted_on: 'Trusted on:',
+        rights: 'All rights reserved.'
+      },
+      es: {
+        headline: 'Detén la infracción rápidamente.<br/>Protege tu propiedad intelectual hoy.',
+        subhead: 'Aberastegue ayuda a creadores y marcas a resolver reclamaciones de <strong>copyright</strong> y <strong>marcas registradas</strong> de forma ágil y confidencial. Desde solicitudes DMCA hasta bajas en marketplaces y apoyo en litigios.',
+        pill_dmca: 'DMCA y Derecho de Autor UE',
+        pill_market: 'Bajas en Marketplaces',
+        pill_tm: 'Disputas EUIPO / DPMA',
+        pill_monitor: 'Monitoreo de Marca',
+        stat_listings: 'Más de 1000 publicaciones/listados retirados',
+        stat_juris: 'Jurisdicciones: UE • EE. UU. • Reino Unido',
+        services_title: 'Servicios enfocados en reclamos de copyright y marcas',
+        services_sub: 'Alcance claro. Precios predecibles. Ejecución rápida.',
+        svc_dmca_title: 'Takedowns DMCA y UE',
+        svc_dmca_desc: 'Retiros rápidos de fotos, videos, código y fichas de producto en hosts y CDNs.',
+        svc_market_title: 'Remociones en Marketplaces',
+        svc_market_desc: 'Amazon, eBay, Etsy, Instagram, Shopify y más—eliminamos falsificaciones y usos indebidos de marca.',
+        svc_domain_title: 'Dominios y Usuarios Sociales',
+        svc_domain_desc: 'Denuncias UDRP/URS y recuperación de usuarios por suplantación o registros de mala fe.',
+        trusted_on: 'Confiado en:',
+        rights: 'Todos los derechos reservados.'
+      }
+    };
+
+    const setLang = (lang) => {
+      const strings = dict[lang] || dict.en;
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (strings[key]) el.innerHTML = strings[key];
+      });
+      btnEn.setAttribute('aria-pressed', lang === 'en');
+      btnEs.setAttribute('aria-pressed', lang === 'es');
+    };
+
+    // Init language buttons
+    const btnEn = document.getElementById('btn-en');
+    const btnEs = document.getElementById('btn-es');
+    btnEn.addEventListener('click', () => setLang('en'));
+    btnEs.addEventListener('click', () => setLang('es'));
+    // Try to auto-set from browser
+    const pref = (navigator.language || 'en').slice(0,2);
+    setLang(['en','es'].includes(pref) ? pref : 'en');
+
+    // THEME TOGGLER
+    const themeBtn = document.getElementById('theme-toggle');
+    const applyTheme = (mode) => {
+      document.documentElement.setAttribute('data-theme', mode);
+      themeBtn.textContent = mode === 'light' ? '☀️' : '🌙';
+      // Update theme-color meta for proper address bar color on mobile
+      const metaTheme = document.querySelector('meta[name="theme-color"]');
+      metaTheme.setAttribute('content', mode === 'light' ? '#ffffff' : '#0f172a');
+      try{ localStorage.setItem('theme', mode); }catch(e){}
+    };
+    const saved = (()=>{try{return localStorage.getItem('theme')}catch(e){return null}})();
+    if(saved){ applyTheme(saved); }
+    themeBtn.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      applyTheme(next);
+    });
   </script>
 </body>
 </html>
